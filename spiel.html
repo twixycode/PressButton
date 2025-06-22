@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Button Game</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #000000;
+      font-family: sans-serif;
+    }
+
+    #meinKnopf {
+      background-color: red;
+      border: none;
+      color: rgb(0, 0, 0);
+      font-size: 24px;
+      padding: 20px;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    #meinKnopf:active {
+      transform: scale(0.95);
+    }
+
+    #sonderText {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #ffffff;
+      text-align: center;
+      display: none;
+      max-width: 300px;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="meinKnopf">0</button>
+  <div id="sonderText"></div>
+
+  <script>
+    const button = document.getElementById("meinKnopf");
+    const textAnzeige = document.getElementById("sonderText");
+
+    let zahl = 0;
+    const max = 100;
+
+    const texte = [
+      "Warum drückst du so?",
+      "Das bringt doch nix!",
+      "Noch 9999 Klicks!",
+      "Hoffentlich lohnt sich das.",
+      "Bist du stolz auf dich?",
+      "Papatastisch gedrückt!",
+      "Ich bin nur ein Button.",
+      "Du wirst beobachtet 👀",
+      "Willst du wirklich wissen, was passiert?",
+      "Fast da... oder auch nicht.",
+      "Klick ruhig weiter, ich warte."
+    ];
+
+    let timeoutId = null; // Timer speichern
+
+function schreibeTextLangsam(text) {
+  if (timeoutId) {
+    clearTimeout(timeoutId); // alten Timer löschen
+  }
+
+  textAnzeige.style.display = "block";
+  textAnzeige.textContent = "";
+  let i = 0;
+
+  const interval = setInterval(() => {
+    textAnzeige.textContent += text[i];
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+    }
+  }, 40);
+
+  // Nach 3,5 Sekunden den Text ausblenden
+  timeoutId = setTimeout(() => {
+    textAnzeige.style.display = "none";
+    timeoutId = null;
+  }, 3500);
+}
+
+    // Typewriter-Funktion
+    function schreibeTextLangsam(text) {
+      textAnzeige.style.display = "block";
+      textAnzeige.textContent = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        textAnzeige.textContent += text[i];
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+        }
+      }, 40); // Geschwindigkeit: 40ms pro Buchstabe
+    }
+
+    button.addEventListener("click", () => {
+      // Wahrscheinlichkeitslogik für Reset
+      let resetChance = 0.01; // 1%
+      let increment = 1;
+
+      if (zahl >= 90) {
+        resetChance = 0.3; // 30% ab 90
+        increment = 2;     // Zählt ab 90 doppelt
+      }
+
+      // Reset mit Wahrscheinlichkeit
+      if (Math.random() < resetChance || zahl >= max) {
+        zahl = 0;
+        textAnzeige.style.display = "none";
+      } else {
+        zahl += increment;
+      }
+
+      button.textContent = zahl;
+
+      // Zufällige Textanzeige mit 1 zu 6 Chance
+      if (Math.floor(Math.random() * 6) === 0) {
+        const zufallsText = texte[Math.floor(Math.random() * texte.length)];
+        schreibeTextLangsam(zufallsText);
+      } else {
+        textAnzeige.style.display = "none";
+      }
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+        
